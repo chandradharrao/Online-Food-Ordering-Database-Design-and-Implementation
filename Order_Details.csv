@@ -1,0 +1,6 @@
+total_amount, status, transaction_id, emp_id, cust_id, restaurant_id
+1250.00, true, 1, 1, 1, 2
+420.69, false, 2, 2, 2, 3
+543.21, true, 3, 3, 3, 4
+1200.00, false, 4, 4, 4, 1 
+382.21, true, 5, 5, 5, 2
