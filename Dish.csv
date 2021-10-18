@@ -1,0 +1,6 @@
+dish_id,dish_name,description,price,category_id
+1,'Pizza','bread filled with cheese and vegies',120,7
+2,'Idly','a type of savoury rice cake',30,6
+3,'Breadsticks','soft bread dipped with mayo',60,6
+4,'Dosa','a thin pancake',45,3
+5,'Ice Cream','A sweet and creamy frozen food',30,3

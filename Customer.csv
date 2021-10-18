@@ -1,0 +1,6 @@
+passkey,email_id,phone_num,last_name,first_name,address_id
+'password1','dhoni@gmail.com','1234567891','dhoni','ms',1
+'pass2','watson@yahoo.com','1987654321','shane','watson',2
+'pass3','rahul@hptmail.com','6541237891','rahul','dravid',3
+'pass4','smriti@gmail.com','4312561987','smriti','mand',4
+'pass4','yohan@rollsroyce.com','9738971585','yohan','blake',5
