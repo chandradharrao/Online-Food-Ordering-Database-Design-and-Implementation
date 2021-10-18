@@ -27,6 +27,22 @@ VALUES
 	('Shri Upahar','key3','moody@gmail.com','7pyyslu06n',8),
 	('New Darshini Veg','key4','kumble@yahoo.com','w21uimvnzt',9);
 INSERT INTO
+	Employee_delivery_boys (status,emp_name)
+VALUES
+	(false,'Ramesh'),
+	(true,'Suresh'),
+	(true,'Mukesh'),
+	(false,'Sitesh'),
+	(true,'Amit');
+INSERT INTO
+	Credit_card (card_number, cust_id)
+VALUES
+	('7036168047848018',1),
+	('8869885781886543',2),
+	('7445899631786909',3),
+	('1285141157637826',4),
+	('5650644677784290',5);
+INSERT INTO
 	Dish_category (cat_name)
 VALUES
 	('Starter'),
@@ -53,4 +69,37 @@ VALUES
 	(3,2),
 	(3,1),
 	(4,4),
-	(5,1);
+	(5,1),
+	(2,3);
+INSERT INTO
+	Payment_reciept (date_time,restaurant_id)
+VALUES
+	('2002-12-13',1),
+	('2003-03-15',4),
+	('2004-08-26',2),
+	('2005-11-19',2),
+	('2006-06-01',3);
+INSERT INTO
+	Order_details (total_amount, status, transaction_id, emp_id, cust_id, restaurant_id)
+VALUES
+	(1250.00, true, 1, 1, 1, 2),
+	(420.69, false, 2, 2, 2, 3),
+	(543.21, true, 3, 3, 3, 4),
+	(1200.00, false, 4, 4, 4, 1 ),
+	(382.21, true, 5, 5, 5, 2);
+INSERT INTO
+	Review (stars,cust_id,restaurant_id,order_id)
+VALUES
+	(2,1,4,2),
+	(5,2,1,3),
+	(5,4,3,2),
+	(4,3,1,3),
+	(3,2,2,4);
+INSERT INTO
+	Order_contains (order_id, dish_id, restaurant_id)
+VALUES
+	(1, 2, 4),
+	(2, 1, 2),
+	(3, 3, 2),
+	(4, 2, 4),
+	(5, 4, 4);

@@ -6,7 +6,7 @@ f.write('\c foodsystem\n')
 f.close()
 
 #exe order
-order = ['Address','Customer','Restaurant_admin','Dish_category','Dish','Cooks']
+order = ['Address','Customer','Restaurant_admin', 'Employee_delivery_boys', 'Credit_card', 'Dish_category','Dish','Cooks', 'Payment_reciept', 'Order_details', 'Review', 'Order_contains']
 
 
 for c0,file in enumerate(order):
