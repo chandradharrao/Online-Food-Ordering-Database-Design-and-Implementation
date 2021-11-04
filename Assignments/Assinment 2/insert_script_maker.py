@@ -47,7 +47,7 @@ for c0,file in enumerate(order):
         print(f"Finished inserting values into {file}")
 
     except:
-        print("File not found,skipping...")
+        print("File not found,hence skipping...")
 
         
         
