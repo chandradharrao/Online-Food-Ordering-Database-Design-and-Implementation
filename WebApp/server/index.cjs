@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 app.use(express.json()); //parse incoming req to json
+var cors = require('cors');
+app.use(cors());  
 
 const db = require("./db.cjs");
 
@@ -65,7 +67,7 @@ app.post("/login",async(req,res)=>{
                         console.log(`Fetched username and password is ${username},${pass}`); 
 
                         if(username==email && pass==password){
-                            return res.status(200).json({success:"user found!"});
+                            return res.status(200).json({success:"user found!",details:admin});
                         }
                     }  
 
@@ -122,11 +124,33 @@ app.post("/createAccount",async(req,res)=>{
         res.status(422).json({error:"Unable to insert address into db"});
     }
 })
-  
+         
+app.get("/allRestraunts/:zipcode",async(req,res)=>{
+    //fetch all hotels details in the same zipcode    
+    const q_zipcode = req.params.zipcode.split("=")[1];  
+    console.log(q_zipcode);    
+    console.log(typeof q_zipcode);
+
+    try{
+        const query_hotels = `select r.name,a.street_num,a.zip_code,a.building_num
+        from restaurant_Admin r
+        inner JOIN address a
+        on r.address_id=a.id
+        where a.zip_code='${q_zipcode}';`;
+
+        let all_hotels = await db.query(query_hotels);
+        all_hotels = all_hotels["rows"];
+        if(all_hotels){
+            return res.status(200).json({success:"Found Hotels",hotels:all_hotels})
+        }else{
+            throw "Issues with searching in database"
+        }
+    }catch(err){
+        console.log(err);
+        return res.status(404).json({failure:"Internal server err"});
+    }
+})
+
 app.listen(PORT,()=>{
     console.log(`Running on PORT ${PORT}....`)
-});
-
-app.get("/allRestraunts/:zipcode",(req,res)=>{
-    //fetch all hotels details in the same zipcode
-})
+});        
