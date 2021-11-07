@@ -17,6 +17,7 @@ class Home extends React.Component{
         }catch(err){
             alert("No hotels in your surrounding!");
             alert(err);
+            console.log(err);
         }
     }
 

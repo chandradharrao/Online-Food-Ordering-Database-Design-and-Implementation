@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5000;
 
 app.post("/login",async(req,res)=>{
     console.log(req.body);
-    const isAdmin = req.body['isAdmin'];
+    const isAdmin = req.body['isAdmin']==="admin";
     console.log(`IsAdmin? ${isAdmin}`);
     const email = req.body["email"];
     const password=req.body["password"];
@@ -22,7 +22,7 @@ app.post("/login",async(req,res)=>{
         }else{
             //fetch from the database.    
             try{
-                const result = await db.query("select * from Customer;");
+                const result = await db.query("select * from Customer;"); /* use where command to retrieve record */
                 // console.log(result);
                 if (result){
                     console.log(result['rows']);
@@ -33,19 +33,19 @@ app.post("/login",async(req,res)=>{
                         //check if the username and passwords match
                         console.log(email_id,passkey);
                         if(email===email_id && password===passkey){
-                            return res.status(200).json({success:"Successfull Login",details:{cust_id,phone_num,first_name,last_name}});
+                            return res.status(200).json({status:true,success:"Successfull Login",details:{cust_id,phone_num,first_name,last_name}});
                         }
                     } 
                     //if not returned till now,then not in db
-                    return res.status(200).json({error:"User not in DB"});
+                    return res.status(200).json({status:false,error:"User not in DB"});
                 }else{
                     console.log("Error");
                     console.log(result);
-                    res.status(422).json({error:"Unable to fetch from DataBa!"});
+                    res.status(422).json({status:false,error:"Unable to fetch from DataBa!"});
                 }
             }catch(err){
                 console.log(err);
-                res.status(422).json({error:"Unable to fetch from DB!"});
+                res.status(422).json({status:false,error:"Unable to fetch from DB!"});
             }
         }
     }else{

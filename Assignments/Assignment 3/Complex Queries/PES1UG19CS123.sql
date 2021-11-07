@@ -1,4 +1,4 @@
--- List hotels in the same city  as that of user
+-- List hotels in the same city / zipcode as that of user
 
 -- create userXaddress TABLE 
 -- create hotelXaddress TABLE 
