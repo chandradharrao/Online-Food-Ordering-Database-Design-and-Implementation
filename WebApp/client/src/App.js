@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{useState} from 'react';
+import {BrowserRouter,Route,Routes} from 'react-router-dom';
+import Navbar from './components/Navbar';
+import LoginForm from './components/LoginForm';
+import CreateAccount from './components/CreateAccount';
 
 function App() {
+  const testUser={
+    email:"test@test.com",
+    password:"test123"
+  }
+
+  const [user,setUser] = useState({name:"",email:""});
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Navbar/>
+      <Routes>
+        <Route path="/" element= {<LoginForm/>} />
+        <Route path="/createAccount" element={<CreateAccount/>} />
+      </Routes>
+    </BrowserRouter>
+
   );
 }
 
