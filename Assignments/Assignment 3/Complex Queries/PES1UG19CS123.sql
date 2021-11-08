@@ -1,5 +1,4 @@
--- List hotels in the same city / zipcode as that of user
-
+-- List hotels in the same city / zipcode as that of user (complexQueries.sql)
 -- create userXaddress TABLE 
 -- create hotelXaddress TABLE 
 select UA.first_name,RA.name
@@ -20,8 +19,7 @@ on r.address_id=a.id) as RA
 on UA.zip_code=RA.zip_code
 where UA.first_name='ms';
 
--- List maximum spending user
-
+-- List maximum spending user (complexQueries.sql)
 select MAX(T.money_spent) as max_spent
 from customer c
 inner JOIN
@@ -33,7 +31,7 @@ inner JOIN
 ) as T  
     on c.cust_id=T.cust_id;
 
--- Retrieve the max number of reviews written to any hotel
+-- Retrieve the max number of reviews written to any hotel (complexQueries.sql)
 selectMAX(T.total_reviews)
 from restaurant_admin r
 inner JOIN (
