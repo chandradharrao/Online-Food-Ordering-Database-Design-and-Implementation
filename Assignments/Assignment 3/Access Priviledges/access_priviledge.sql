@@ -17,3 +17,6 @@ create VIEW restraunt_interface as select name,id,address_id from restaurant_adm
 -- Marketing user should be able to only read dish_category,dish,address and restraunt name to make offers
 create user marketing with password 'marketing';
 GRANT select on dish,dish_category,address,restraunt_interface to marketing;
+
+-- Connect to foodsystem database and execute below command for each table to see which user has what access priviledge
+select grantee,privilege_type FROM information_schema.role_table_grants where table_name='address';
