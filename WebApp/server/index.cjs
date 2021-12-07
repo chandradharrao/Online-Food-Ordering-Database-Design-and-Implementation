@@ -83,7 +83,39 @@ app.post("/login",async(req,res)=>{
     }
 }) 
 
+//http://localhost:5000/displayHotels/price=50
+//http://localhost:5000/allRestraunts/zipcode=560061
+
+app.get("/displayHotels/:price",async(req,res)=>{
+    console.log("Called display hotels....")
+    const q_price = req.params.price.split("=")[1];  
+    console.log(q_price);  
+    
+    try{
+        const query_hotels = `select 
+        dish_id,dish_name,description 
+        price from dish 
+        where price >= '${q_price}';`;
+        // const query_hotels = "SELECT * FROM pg_catalog.pg_tables;";
+        console.log(query_hotels)
+
+        let all_hotels = await db.query(query_hotels);
+        all_hotels = all_hotels["rows"];
+        console.log(all_hotels);
+
+        if(all_hotels){
+            return res.status(200).json({success:"Found Hotels",hotels:all_hotels})
+        }else{
+            throw "Issues with searching in database"
+        }
+    }catch(err){
+        console.log(err);
+        return res.status(404).json({failure:"Internal server err"});
+    }
+})
+
 app.post("/createAccount",async(req,res)=>{
+    console.log("Creating account...")
     //insert address
     const {street_num,zip_code,building_num}=req.body["address"];
 
@@ -137,6 +169,7 @@ app.get("/allRestraunts/:zipcode",async(req,res)=>{
         inner JOIN address a
         on r.address_id=a.id
         where a.zip_code='${q_zipcode}';`;
+        console.log(query_hotels)
 
         let all_hotels = await db.query(query_hotels);
         all_hotels = all_hotels["rows"];

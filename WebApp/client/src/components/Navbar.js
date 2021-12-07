@@ -10,6 +10,7 @@ const Navbar = ()=>{
         <div>
             <li><a href="/">Home</a></li>
             <li><a href="/login">Login</a></li>
+            <li><a href="/itemsShow">Dishes Display</a></li>
             <li><a href="/createAccount">Create Account</a></li>
             <button onClick={logout}>Logout?</button>
         </div>

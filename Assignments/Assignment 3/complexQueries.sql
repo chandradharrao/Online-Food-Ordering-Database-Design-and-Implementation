@@ -45,7 +45,7 @@ on UA.zip_code=RA.zip_code
 where UA.first_name='ms';
 
 -- 5 Retrieve the max number of reviews written to any hotel
-selectMAX(T.total_reviews)
+select MAX(T.total_reviews)
 from restaurant_admin r
 inner JOIN (
     select o.restaurant_id as res_id,COUNT(*) as total_reviews
