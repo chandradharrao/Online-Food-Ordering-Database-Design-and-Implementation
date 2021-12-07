@@ -83,28 +83,28 @@ app.post("/login",async(req,res)=>{
     }
 }) 
 
-//http://localhost:5000/displayHotels/price=50
+//http://localhost:5000/displayDishes/price=50
 //http://localhost:5000/allRestraunts/zipcode=560061
 
-app.get("/displayHotels/:price",async(req,res)=>{
+app.get("/displayDishes/:price",async(req,res)=>{
     console.log("Called display hotels....")
     const q_price = req.params.price.split("=")[1];  
     console.log(q_price);  
     
     try{
-        const query_hotels = `select 
-        dish_id,dish_name,description 
-        price from dish 
+        const query_dishes = `select 
+        dish_name,description 
+        from dish 
         where price >= '${q_price}';`;
         // const query_hotels = "SELECT * FROM pg_catalog.pg_tables;";
-        console.log(query_hotels)
+        console.log(query_dishes)
 
-        let all_hotels = await db.query(query_hotels);
-        all_hotels = all_hotels["rows"];
-        console.log(all_hotels);
+        let all_dishes = await db.query(query_dishes);
+        all_dishes = all_dishes["rows"];
+        console.log(all_dishes);
 
-        if(all_hotels){
-            return res.status(200).json({success:"Found Hotels",hotels:all_hotels})
+        if(all_dishes){
+            return res.status(200).json({success:"Found dishes",dishes:all_dishes})
         }else{
             throw "Issues with searching in database"
         }

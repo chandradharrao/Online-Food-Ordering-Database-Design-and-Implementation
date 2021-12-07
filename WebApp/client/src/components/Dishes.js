@@ -6,7 +6,7 @@ class Dishes extends React.Component{
         super(props);
         this.state={
             price:25,
-            hotels:[]
+            dishes:[]
         }
     }
 
@@ -16,14 +16,15 @@ class Dishes extends React.Component{
     }
 
     submitIT= async()=>{
-        const url = `http://localhost:5000/displayHotels/price=${this.state.price}`;
+        const url = `http://localhost:5000/displayDishes/price=${this.state.price}`;
 
         try{
             const response = await axios.get(url);
-            const hotels = response.data.hotels;
-            this.setState({hotels:hotels});
+            const dishes = response.data.dishes;
+            this.setState({dishes:dishes});
+            alert(JSON.stringify(this.state.dishes))
         }catch(err){
-            alert("No hotels in locality");
+            alert("No dishes in locality");
             alert(err);
             console.log(err);
         }
@@ -37,7 +38,9 @@ class Dishes extends React.Component{
 
                 <div>
                     {
-                        this.state.hotels.length>0?`${JSON.stringify(this.state.hotels)}`:null
+                        this.state.dishes.length>0?this.state.dishes.map((dish,i)=>{
+                            return <div key={i}>{dish.dish_name},{dish.description}</div>
+                        }):null
                     }
                 </div>
             </div>
