@@ -107,7 +107,6 @@ app.post("/login", async (req, res) => {
 //http://localhost:5000/displayDishes/price=50
 //http://localhost:5000/allRestraunts/zipcode=560061
 
-<<<<<<< HEAD
 app.get("/displayDishes/:price",async(req,res)=>{
     console.log("Called /displayDishes/:price....")
     const q_price = req.params.price.split("=")[1];  
@@ -115,31 +114,16 @@ app.get("/displayDishes/:price",async(req,res)=>{
     
     try{
         const query_dishes = `select 
-=======
-app.get("/displayDishes/:price", async (req, res) => {
-  console.log("Called display hotels....");
-  const q_price = req.params.price.split("=")[1];
-  console.log(q_price);
-
-  try {
-    const query_dishes = `select 
->>>>>>> f7b1195ef8f90308439741e88c806843089a3d6a
         dish_name,description 
         from dish 
         where price >= '${q_price}';`;
     // const query_hotels = "SELECT * FROM pg_catalog.pg_tables;";
     console.log(query_dishes);
 
-<<<<<<< HEAD
         let all_dishes = await db.query(query_dishes);
         console.log(all_dishes)
         all_dishes = all_dishes["rows"];
         console.log(all_dishes);
-=======
-    let all_dishes = await db.query(query_dishes);
-    all_dishes = all_dishes["rows"];
-    console.log(all_dishes);
->>>>>>> f7b1195ef8f90308439741e88c806843089a3d6a
 
     if (all_dishes) {
       return res
@@ -148,8 +132,10 @@ app.get("/displayDishes/:price", async (req, res) => {
     } else {
       throw "Issues with searching in database";
     }
-<<<<<<< HEAD
-})
+}catch(err){
+  return res.status(404).json({failure:"Internal server err"});
+}
+});
 
 app.get("/mostPopularHotel",async(req,res)=>{
     const q = `select MAX(T.total_reviews)
@@ -218,41 +204,8 @@ app.post("/createAccount",async(req,res)=>{
         }else throw "address_result variable is undefined";
     }catch(err){
         res.status(422).json({error:"Unable to insert address into db"});
-=======
-  } catch (err) {
-    console.log(err);
-    return res.status(404).json({ failure: "Internal server err" });
-  }
-});
-
-// DISPLAY THE RESTAURANTS
-app.get("/displayRest", async (req, res) => {
-  console.log("Called display hotels....");
-
-  try {
-    const query_rest = `select 
-        name 
-        from restaurant_admin;`;
-
-    console.log(query_rest);
-
-    let all_rest = await db.query(query_rest);
-    all_rest = all_rest["rows"];
-    console.log(all_rest);
-
-    if (all_rest) {
-      return res
-        .status(200)
-        .json({ success: "Found dishes", restaurants: all_rest });
-    } else {
-      throw "Issues with searching in database";
->>>>>>> f7b1195ef8f90308439741e88c806843089a3d6a
     }
-  } catch (err) {
-    console.log(err);
-    return res.status(404).json({ failure: "Internal server err" });
-  }
-});
+  });
 
 app.post("/createAccount", async (req, res) => {
   console.log("Creating account...");
