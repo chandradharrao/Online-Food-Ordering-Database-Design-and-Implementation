@@ -138,31 +138,28 @@ app.get("/displayDishes/:price", async (req, res) => {
   }
 });
 
-app.get("/mostPopularHotel", async (req, res) => {
-  const q = `select MAX(T.total_reviews)
-    from restaurant_admin r
-    inner JOIN (
-        select o.restaurant_id as res_id,COUNT(*) as total_reviews
-        from review o
-        GROUP BY o.restaurant_id
-    ) as T
-    on T.res_id = r.id;`;
+app.get("/getOrderDetails/:first_name/:lastname", async (req, res) => {
+  console.log(req.params.first_name)
+  first_name = `'${req.params.first_name.split("=")[1]}'`;
+  last_name = `'${req.params.lastname.split("=")[1]}'`;
+
+  const q = `select total_amount,status,order_id
+  from (
+      order_details inner join customer
+      on order_details.cust_id=customer.cust_id
+  ) 
+  where customer.last_name=${last_name} and customer.first_name=${first_name};`;
+  console.log(q)
 
   try {
-    let hotels = await db.query(q);
-    hotels = hotels["rows"];
-    console.log(hotels);
+    let order = await db.query(q);
+    order = order["rows"];
+    console.log(order);
 
-    console.log(query_rest);
-
-    let all_rest = await db.query(query_rest);
-    all_rest = all_rest["rows"];
-    console.log(all_rest);
-
-    if (all_rest) {
+    if (order) {
       return res
         .status(200)
-        .json({ success: "Found Restaurants", restaurants: all_rest });
+        .json({ success: "Found orders", orders: order });
     } else {
       throw "Issues with searching in database";
     }
@@ -230,78 +227,6 @@ app.get("/orderRest", async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(404).json({ failure: "Internal server err" });
-  }
-});
-
-///////////////////////////////////////////////////////////////////////////////
-
-app.post("/createAccount", async (req, res) => {
-  console.log("Creating account...");
-  //insert address
-  const { street_num, zip_code, building_num } = req.body["address"];
-
-  try {
-    const address_result = await db.query(
-      "INSERT INTO Address (street_num,zip_code,building_num) VALUES ($1,$2,$3)",
-      [street_num, zip_code, building_num]
-    );
-
-    if (address_result) {
-      const isAdmin = req.body["isAdmin"];
-      if (isAdmin) {
-        //if user is admin,create admin account
-        const { name, passkey, email_id, bank_number } = req.body["details"];
-
-        try {
-          const admin_result = await db.qury(
-            "INSERT INTO Restaurant_admin (name,passkey,email_id,bank_number,address_id) VALUES ($1,$2,$3,$4,$5)",
-            [
-              name,
-              passkey,
-              email_id,
-              bank_number,
-              address_result["rows"][0]["id"],
-            ]
-          );
-
-          if (admin_result) {
-            return res
-              .status(200)
-              .json({ success: "Inserted admin into database" });
-          } else throw "Unable to INSERT INTO address table in db";
-        } catch (err) {
-          console.log(err);
-          return res
-            .status(422)
-            .json({ error: "Unable to insert admin into db" });
-        }
-      } else {
-        //if user is customer create customer account
-        const { passkey, email_id, phone_num, last_name, first_name } =
-          req.body["details"];
-        try {
-          const customer_result = await db.query(
-            "INSERT INTO Customer (passkey,email_id,phone_num,last_name,first_name,address_id) ($1,$2,$3,$4,$5,$6)",
-            [
-              passkey,
-              email_id,
-              phone_num,
-              last_name,
-              first_name,
-              address_result["rows"][0]["id"],
-            ]
-          );
-
-          if (customer_result) {
-            return res.status(200).json({ success: "Inserted Customer" });
-          } else throw "Unable to insert itno customer table";
-        } catch (err) {
-          res.status(422).json({ error: "Unable to insert customer into db" });
-        }
-      }
-    } else throw "address_result variable is undefined";
-  } catch (err) {
-    res.status(422).json({ error: "Unable to insert address into db" });
   }
 });
 

@@ -7,6 +7,7 @@ import Home from "./components/Home";
 import Dishes from "./components/Dishes";
 import Restaurants from "./components/Restaurants";
 import OrderRestaurants from "./components/orderRest";
+import OrderDetail from "./components/OrderDetail";
 
 function App() {
   const [user, setUser] = useState({ name: "", email: "" });
@@ -15,6 +16,7 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <Routes>
+        <Route path="/orderDetails" element={<OrderDetail/>}/>
         <Route path="/restOrder" element={<OrderRestaurants />} />
         <Route path="/restShow" element={<Restaurants />} />
         <Route path="/itemsShow" element={<Dishes />} />
