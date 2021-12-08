@@ -108,7 +108,7 @@ app.post("/login", async (req, res) => {
 //http://localhost:5000/allRestraunts/zipcode=560061
 
 app.get("/displayDishes/:price", async (req, res) => {
-  console.log("Called display hotels....");
+  console.log("Called /displayDishes/:price....");
   const q_price = req.params.price.split("=")[1];
   console.log(q_price);
 
@@ -121,6 +121,7 @@ app.get("/displayDishes/:price", async (req, res) => {
     console.log(query_dishes);
 
     let all_dishes = await db.query(query_dishes);
+    console.log(all_dishes);
     all_dishes = all_dishes["rows"];
     console.log(all_dishes);
 
@@ -132,19 +133,24 @@ app.get("/displayDishes/:price", async (req, res) => {
       throw "Issues with searching in database";
     }
   } catch (err) {
-    console.log(err);
     return res.status(404).json({ failure: "Internal server err" });
   }
 });
 
-// DISPLAY THE RESTAURANTS
-app.get("/displayRest", async (req, res) => {
-  console.log("Called display hotels....");
+app.get("/mostPopularHotel", async (req, res) => {
+  const q = `select MAX(T.total_reviews)
+    from restaurant_admin r
+    inner JOIN (
+        select o.restaurant_id as res_id,COUNT(*) as total_reviews
+        from review o
+        GROUP BY o.restaurant_id
+    ) as T
+    on T.res_id = r.id;`;
 
   try {
-    const query_rest = `select 
-        name 
-        from restaurant_admin;`;
+    let hotels = await db.query(q);
+    hotels = hotels["rows"];
+    console.log(hotels);
 
     console.log(query_rest);
 
@@ -196,6 +202,76 @@ app.get("/orderRest", async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(404).json({ failure: "Internal server err" });
+  }
+});
+
+app.post("/createAccount", async (req, res) => {
+  console.log("Creating account...");
+  //insert address
+  const { street_num, zip_code, building_num } = req.body["address"];
+
+  try {
+    const address_result = await db.query(
+      "INSERT INTO Address (street_num,zip_code,building_num) VALUES ($1,$2,$3)",
+      [street_num, zip_code, building_num]
+    );
+
+    if (address_result) {
+      const isAdmin = req.body["isAdmin"];
+      if (isAdmin) {
+        //if user is admin,create admin account
+        const { name, passkey, email_id, bank_number } = req.body["details"];
+
+        try {
+          const admin_result = await db.qury(
+            "INSERT INTO Restaurant_admin (name,passkey,email_id,bank_number,address_id) VALUES ($1,$2,$3,$4,$5)",
+            [
+              name,
+              passkey,
+              email_id,
+              bank_number,
+              address_result["rows"][0]["id"],
+            ]
+          );
+
+          if (admin_result) {
+            return res
+              .status(200)
+              .json({ success: "Inserted admin into database" });
+          } else throw "Unable to INSERT INTO address table in db";
+        } catch (err) {
+          console.log(err);
+          return res
+            .status(422)
+            .json({ error: "Unable to insert admin into db" });
+        }
+      } else {
+        //if user is customer create customer account
+        const { passkey, email_id, phone_num, last_name, first_name } =
+          req.body["details"];
+        try {
+          const customer_result = await db.query(
+            "INSERT INTO Customer (passkey,email_id,phone_num,last_name,first_name,address_id) ($1,$2,$3,$4,$5,$6)",
+            [
+              passkey,
+              email_id,
+              phone_num,
+              last_name,
+              first_name,
+              address_result["rows"][0]["id"],
+            ]
+          );
+
+          if (customer_result) {
+            return res.status(200).json({ success: "Inserted Customer" });
+          } else throw "Unable to insert itno customer table";
+        } catch (err) {
+          res.status(422).json({ error: "Unable to insert customer into db" });
+        }
+      }
+    } else throw "address_result variable is undefined";
+  } catch (err) {
+    res.status(422).json({ error: "Unable to insert address into db" });
   }
 });
 
