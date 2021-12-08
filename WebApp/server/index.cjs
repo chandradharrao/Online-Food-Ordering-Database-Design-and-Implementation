@@ -8,6 +8,7 @@ const db = require("./db.cjs");
 
 const PORT = process.env.PORT || 5000;
 
+//CUSTOMER LOGIN
 app.post("/login", async (req, res) => {
   console.log(req.body);
   const isAdmin = req.body["isAdmin"] === "admin";
@@ -170,6 +171,33 @@ app.get("/mostPopularHotel", async (req, res) => {
     return res.status(404).json({ failure: "Internal server err" });
   }
 });
+/////////////////////////////////////////////////// Darshan's Code
+// Display Hotels
+app.get("/displayRest", async (req, res) => {
+  console.log("Called display all hotels....");
+
+  try {
+    const query_rest = `select name
+    from restaurant_admin`;
+
+    console.log(query_rest);
+
+    let all_rest = await db.query(query_rest);
+    all_rest = all_rest["rows"];
+    console.log(all_rest);
+
+    if (all_rest) {
+      return res
+        .status(200)
+        .json({ success: "All Restaurants", restaurants: all_rest });
+    } else {
+      throw "Issues with searching in database";
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json({ failure: "Internal server err" });
+  }
+});
 
 // Sort restaurants by order
 app.get("/orderRest", async (req, res) => {
@@ -204,6 +232,8 @@ app.get("/orderRest", async (req, res) => {
     return res.status(404).json({ failure: "Internal server err" });
   }
 });
+
+///////////////////////////////////////////////////////////////////////////////
 
 app.post("/createAccount", async (req, res) => {
   console.log("Creating account...");
