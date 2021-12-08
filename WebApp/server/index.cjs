@@ -87,7 +87,7 @@ app.post("/login",async(req,res)=>{
 //http://localhost:5000/allRestraunts/zipcode=560061
 
 app.get("/displayDishes/:price",async(req,res)=>{
-    console.log("Called display hotels....")
+    console.log("Called /displayDishes/:price....")
     const q_price = req.params.price.split("=")[1];  
     console.log(q_price);  
     
@@ -100,6 +100,7 @@ app.get("/displayDishes/:price",async(req,res)=>{
         console.log(query_dishes)
 
         let all_dishes = await db.query(query_dishes);
+        console.log(all_dishes)
         all_dishes = all_dishes["rows"];
         console.log(all_dishes);
 
@@ -109,6 +110,33 @@ app.get("/displayDishes/:price",async(req,res)=>{
             throw "Issues with searching in database"
         }
     }catch(err){
+        console.log(err);
+        return res.status(404).json({failure:"Internal server err"});
+    }
+})
+
+app.get("/mostPopularHotel",async(req,res)=>{
+    const q = `select MAX(T.total_reviews)
+    from restaurant_admin r
+    inner JOIN (
+        select o.restaurant_id as res_id,COUNT(*) as total_reviews
+        from review o
+        GROUP BY o.restaurant_id
+    ) as T
+    on T.res_id = r.id;`
+
+    try{
+        let hotels = await db.query(q);
+        hotels = hotels['rows'];
+        console.log(hotels);
+
+        if(hotels){
+            return res.status(200).json({success:"Found dishes",dishes:all_dishes})
+        }else{
+            throw "Issues with searching in database"
+            }
+        }
+        catch(err){
         console.log(err);
         return res.status(404).json({failure:"Internal server err"});
     }
