@@ -21,6 +21,9 @@ const Navbar = () => {
         <a href="/restShow">Restaurants Display</a>
       </li>
       <li>
+        <a href="/restOrder">Restaurants Sorted by orders</a>
+      </li>
+      <li>
         <a href="/createAccount">Create Account</a>
       </li>
       <button onClick={logout}>Logout?</button>

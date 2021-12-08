@@ -13,7 +13,8 @@ from (select ra.id,COUNT(*) as num_orders
     on o.restaurant_id=ra.id
     GROUP BY ra.id) as T
 inner JOIN restaurant_admin ra1
-on T.id=ra1.id;
+on T.id=ra1.id
+order by T.num_orders desc;
 
 -- 3 dishes whose list price is equal to the highest list price of the dish within the same category
 select d.dish_name,d.price

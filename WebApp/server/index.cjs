@@ -155,7 +155,41 @@ app.get("/displayRest", async (req, res) => {
     if (all_rest) {
       return res
         .status(200)
-        .json({ success: "Found dishes", restaurants: all_rest });
+        .json({ success: "Found Restaurants", restaurants: all_rest });
+    } else {
+      throw "Issues with searching in database";
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json({ failure: "Internal server err" });
+  }
+});
+
+// Sort restaurants by order
+app.get("/orderRest", async (req, res) => {
+  console.log("Called sort order display hotels....");
+
+  try {
+    const query_rest = `select ra1.name,T.num_orders
+    from (select ra.id,COUNT(*) as num_orders
+        from restaurant_admin ra
+        inner JOIN order_details as o
+        on o.restaurant_id=ra.id
+        GROUP BY ra.id) as T
+    inner JOIN restaurant_admin ra1
+    on T.id=ra1.id
+    order by T.num_orders desc;`;
+
+    console.log(query_rest);
+
+    let all_rest = await db.query(query_rest);
+    all_rest = all_rest["rows"];
+    console.log(all_rest);
+
+    if (all_rest) {
+      return res
+        .status(200)
+        .json({ success: "Sorted Restaurants", restaurants: all_rest });
     } else {
       throw "Issues with searching in database";
     }

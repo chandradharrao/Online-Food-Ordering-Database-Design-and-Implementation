@@ -6,6 +6,7 @@ import CreateAccount from "./components/CreateAccount";
 import Home from "./components/Home";
 import Dishes from "./components/Dishes";
 import Restaurants from "./components/Restaurants";
+import OrderRestaurants from "./components/orderRest";
 
 function App() {
   const [user, setUser] = useState({ name: "", email: "" });
@@ -14,6 +15,7 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <Routes>
+        <Route path="/restOrder" element={<OrderRestaurants />} />
         <Route path="/restShow" element={<Restaurants />} />
         <Route path="/itemsShow" element={<Dishes />} />
         <Route path="/login" element={<LoginForm />} />
