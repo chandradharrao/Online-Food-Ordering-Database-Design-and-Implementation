@@ -1,6 +1,12 @@
 # Online-Food-Ordering-Database-Design-and-Implementation
 
-1) How to use *insert_script_maker.py* file?
+1) How to setup the project?
+- Clone the repository
+- Remove the package.lock.json from both server and client
+- Then do *npm install*.
+- Run *npm start* to run.
+
+2) How to use *insert_script_maker.py* file?
 - Make one csv file for each of the table with the nomenclature <table_name_here>.csv
 - First row of csv file is the table headers (except for the *BIGSERIAL* type column which should be ignored)
 - Fill in all the values in the csv
