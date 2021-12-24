@@ -1,4 +1,4 @@
-# Online-Food-Ordering-Database-Design-and-Implementation
+# DBMS UE19CS301 Course Project Online Food Ordering System using PERN stack ie PostgreSQL,Express,Ract and Node.
 
 1) How to setup the project?
 - Clone the repository
